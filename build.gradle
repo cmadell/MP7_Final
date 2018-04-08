@@ -20,9 +20,15 @@ allprojects {
     }
 }
 
+task copyConfigurations(type: Copy) {
+    from 'runConfigurations'
+    into '.idea/runConfigurations'
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+clean.dependsOn copyConfigurations
 
 checkstyle {
     toolVersion "8.7"
