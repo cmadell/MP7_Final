@@ -24,11 +24,19 @@ task copyConfigurations(type: Copy) {
     from 'runConfigurations'
     into '.idea/runConfigurations'
 }
+allprojects {
+    afterEvaluate {
+        it.tasks.each {
+            if (it != rootProject.tasks.copyConfigurations) {
+                it.finalizedBy rootProject.tasks.copyConfigurations
+            }
+        }
+    }
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-clean.dependsOn copyConfigurations
 
 checkstyle {
     toolVersion "8.7"
