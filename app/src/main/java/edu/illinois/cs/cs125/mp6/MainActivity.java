@@ -33,6 +33,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.commons.io.FileUtils;
@@ -351,7 +352,20 @@ public final class MainActivity extends AppCompatActivity {
          * Add code here to show the caption, show or hide the dog and cat icons,
          * and deal with Rick.
          */
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /** Current bitmap we are working with. */
     private Bitmap currentBitmap;

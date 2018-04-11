@@ -1,5 +1,8 @@
 package edu.illinois.cs.cs125.mp6.lib;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 public final class RecognizePhoto {
 
     /**
@@ -9,7 +12,11 @@ public final class RecognizePhoto {
      * @return the width of the image or 0 on failure
      */
     public static int getWidth(final String json) {
-        return 0;
+        JsonParser parser = new JsonParser();
+        JsonObject root = parser.parse(json).getAsJsonObject();
+        JsonObject metaData = root.getAsJsonObject("metadata");
+        int width = metaData.get("width").getAsInt();
+        return width;
     }
 
     /**
@@ -32,3 +39,4 @@ public final class RecognizePhoto {
         return "";
     }
 }
+
