@@ -3,6 +3,9 @@ package edu.illinois.cs.cs125.mp6.lib;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+/**
+ * Class that recognizes photo imported from Android emulator.
+ */
 public final class RecognizePhoto {
 
     /**
@@ -56,7 +59,7 @@ public final class RecognizePhoto {
      * @param json string from API.
      * @return caption.
      */
-    public static java.lang.String getCaption(java.lang.String json) {
+    public static java.lang.String getCaption(final java.lang.String json) {
         return json;
     }
 
@@ -68,7 +71,7 @@ public final class RecognizePhoto {
      * @param minConfidence minimum confidence required for this determination.
      * @return boolean indicating whether image contains dog or false on failure.
      */
-    public static boolean isADog(java.lang.String json, double minConfidence) {
+    public static boolean isADog(final java.lang.String json, final double minConfidence) {
         return true;
     }
     /**
@@ -79,7 +82,7 @@ public final class RecognizePhoto {
      * @param minConfidence minimum confidence required for this determination.
      * @return boolean indicating whether image contains cat or false on failure.
      */
-    public static boolean isACat(java.lang.String json, double minConfidence) {
+    public static boolean isACat(final java.lang.String json, final double minConfidence) {
         return false;
     }
 
@@ -88,7 +91,7 @@ public final class RecognizePhoto {
      * @param json string from API.
      * @return true if I Rickrolled yourself.
      */
-    public static boolean isRick(java.lang.String json) {
+    public static boolean isRick(final java.lang.String json) {
         return false;
     }
 }
