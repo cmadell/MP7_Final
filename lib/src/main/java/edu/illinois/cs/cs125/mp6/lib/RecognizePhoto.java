@@ -12,11 +12,15 @@ public final class RecognizePhoto {
      * @return the width of the image or 0 on failure
      */
     public static int getWidth(final String json) {
-        JsonParser parser = new JsonParser();
-        JsonObject root = parser.parse(json).getAsJsonObject();
-        JsonObject metaData = root.getAsJsonObject("metadata");
-        int width = metaData.get("width").getAsInt();
-        return width;
+        if (json == null) {
+            return 0;
+        } else {
+            JsonParser parser = new JsonParser();
+            JsonObject root = parser.parse(json).getAsJsonObject();
+            JsonObject metaData = root.getAsJsonObject("metadata");
+            int width = metaData.get("width").getAsInt();
+            return width;
+        }
     }
 
     /**
@@ -26,7 +30,15 @@ public final class RecognizePhoto {
      * @return the width of the image or 0 on failure
      */
     public static int getHeight(final String json) {
-        return 0;
+        if (json == null) {
+            return 0;
+        } else {
+            JsonParser parser = new JsonParser();
+            JsonObject root = parser.parse(json).getAsJsonObject();
+            JsonObject metaData = root.getAsJsonObject("metadata");
+            int width = metaData.get("height").getAsInt();
+            return width;
+        }
     }
 
     /**
@@ -37,6 +49,47 @@ public final class RecognizePhoto {
      */
     public static String getFormat(final String json) {
         return "";
+    }
+
+    /**
+     * Return the caption describing the image created by API.
+     * @param json string from API.
+     * @return caption.
+     */
+    public static java.lang.String getCaption(java.lang.String json) {
+        return json;
+    }
+
+    /**
+     * Determine whether the image contains a dog. You should do this by examining
+     * the tags returned by API. If tag with name "dog" exists, return true. Otherwise,
+     * false.
+     * @param json string from API.
+     * @param minConfidence minimum confidence required for this determination.
+     * @return boolean indicating whether image contains dog or false on failure.
+     */
+    public static boolean isADog(java.lang.String json, double minConfidence) {
+        return true;
+    }
+    /**
+     * Determine whether the image contains a cat. You should do this by examining
+     * the tags returned by API. If tag with name "cat" exists, return true. Otherwise,
+     * false.
+     * @param json string from API.
+     * @param minConfidence minimum confidence required for this determination.
+     * @return boolean indicating whether image contains cat or false on failure.
+     */
+    public static boolean isACat(java.lang.String json, double minConfidence) {
+        return false;
+    }
+
+    /**
+     * Check if image has Rick Astley.
+     * @param json string from API.
+     * @return true if I Rickrolled yourself.
+     */
+    public static boolean isRick(java.lang.String json) {
+        return false;
     }
 }
 
