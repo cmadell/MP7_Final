@@ -122,8 +122,8 @@ public final class RecognizePhoto {
         JsonObject root = parser.parse(json).getAsJsonObject();
         JsonArray tags = root.getAsJsonArray("tags");
         for (int i = 0; i < tags.size(); i++) {
-            if (tags.get(i).getAsJsonObject().get("name").getAsString()
-                    .equalsIgnoreCase("cat")
+                if (tags.get(i).getAsJsonObject().get("name").getAsString()
+                        .equalsIgnoreCase("cat")
                     && tags.get(i).getAsJsonObject().get("confidence").
                     getAsDouble() >= minConfidence) {
                 return true;
@@ -138,7 +138,21 @@ public final class RecognizePhoto {
      * @return true if I Rickrolled yourself.
      */
     public static boolean isRick(final java.lang.String json) {
+        if (json == null) {
+            return false;
+        }
+        JsonParser parser = new JsonParser();
+        JsonObject root = parser.parse(json).getAsJsonObject();
+        JsonArray categories = root.getAsJsonArray("categories");
+        JsonArray celebrities = categories.get(0).getAsJsonObject().getAsJsonArray("celebrities");
+        for (int i = 0; i < celebrities.size(); i++) {
+            if (celebrities.get(i).getAsJsonObject().get("name").getAsString()
+                    .equalsIgnoreCase("Rick Astley")) {
+                return true;
+            }
+        }
         return false;
     }
 }
+
 
