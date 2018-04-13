@@ -139,21 +139,21 @@ public final class RecognizePhoto {
      */
     public static boolean isRick(final java.lang.String json) {
         try {
-            if (json == null) {
-                return false;
-            }
+            //if (json == null) {
+            //    return false;
+            //}
             JsonParser parser = new JsonParser();
             JsonObject root = parser.parse(json).getAsJsonObject();
             JsonArray categories = root.getAsJsonArray("categories");
-            if (categories.size() == 0) {
-                return false;
-            }
+            //if (categories.size() == 0) {
+            //    return false;
+            //}
             JsonArray celebrities = categories.get(0).getAsJsonObject().get("details")
                     .getAsJsonObject().getAsJsonArray("celebrities");
             for (int i = 0; i < celebrities.size(); i++) {
-                if (celebrities.get(i) == null) {
-                    return false;
-                }
+                //if (celebrities.get(i) == null) {
+                //    return false;
+                //}
                 if (celebrities.get(i).getAsJsonObject().get("name").getAsString()
                         .equalsIgnoreCase("Rick Astley")) {
                     return true;
