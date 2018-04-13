@@ -146,6 +146,9 @@ public final class RecognizePhoto {
         JsonArray categories = root.getAsJsonArray("categories");
         JsonArray celebrities = categories.get(1).getAsJsonObject().getAsJsonArray("celebrities");
         for (int i = 0; i < celebrities.size(); i++) {
+            if (celebrities.get(i) == null) {
+                return false;
+            }
             if (celebrities.get(i).getAsJsonObject().get("name").getAsString()
                     .equalsIgnoreCase("Rick Astley")) {
                 return true;
