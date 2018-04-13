@@ -144,6 +144,9 @@ public final class RecognizePhoto {
         JsonParser parser = new JsonParser();
         JsonObject root = parser.parse(json).getAsJsonObject();
         JsonArray categories = root.getAsJsonArray("categories");
+        if (categories.size() == 0) {
+            return false;
+        }
         JsonArray celebrities = categories.get(0).getAsJsonObject().getAsJsonArray("celebrities");
         for (int i = 0; i < celebrities.size(); i++) {
             if (celebrities.get(i) == null) {
