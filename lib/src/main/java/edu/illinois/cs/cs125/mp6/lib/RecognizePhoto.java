@@ -148,7 +148,7 @@ public final class RecognizePhoto {
             return false;
         }
         JsonArray celebrities = categories.get(0).getAsJsonObject().get("details")
-                .getAsJsonObject().getAsJsonArray("celebrities");
+                .getAsJsonArray();
         for (int i = 0; i < celebrities.size(); i++) {
             if (celebrities.get(i) == null) {
                 return false;
