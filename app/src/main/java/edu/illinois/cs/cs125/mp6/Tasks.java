@@ -86,7 +86,7 @@ class Tasks {
             if (activity == null || activity.isFinishing()) {
                 return 0;
             }
-            final ImageView photoView = activity.findViewById(R.id.photoView);
+            final ImageView photoView = activity.findViewById(R.id.imageView2);
             int targetWidth = photoView.getWidth();
             int targetHeight = photoView.getHeight();
 
@@ -146,7 +146,7 @@ class Tasks {
 
         /** Url for the MS cognitive services API. */
         private static final String MS_CV_API_URL =
-                "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze";
+                "https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/ocr";
 
         /** Default visual features to request. You may need to change this value. */
         private static final String MS_CV_API_DEFAULT_VISUAL_FEATURES =
@@ -235,7 +235,7 @@ class Tasks {
                             }
                             ProgressBar progressBar = activity.findViewById(R.id.progressBar);
                             progressBar.setVisibility(View.INVISIBLE);
-                            activity.finishProcessImage(response);
+                            activity.returnAPI(response);
                         }
                     }, new Response.ErrorListener() {
                 @Override

@@ -3,6 +3,7 @@ package edu.illinois.cs.cs125.mp6;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +23,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,6 +35,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -61,6 +65,15 @@ public final class MainActivity extends AppCompatActivity {
     /** Constant to request an image capture. */
     private static final int IMAGE_CAPTURE_REQUEST_CODE = 1;
 
+    public static String jsonexample = "";
+
+    public static String json2example = "";
+
+    public static String json3example = "";
+
+    public static String[] jsonStringArray = {json2example, json3example};
+
+
     /** Constant to request permission to write to the external storage device. */
     private static final int REQUEST_WRITE_STORAGE = 112;
 
@@ -87,7 +100,7 @@ public final class MainActivity extends AppCompatActivity {
         /*
          * Set up handlers for each button in our UI. These run when the buttons are clicked.
          */
-        final ImageButton openFile = findViewById(R.id.openFile);
+        final Button openFile = findViewById(R.id.upload_image);
         openFile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -95,7 +108,7 @@ public final class MainActivity extends AppCompatActivity {
                 startOpenFile();
             }
         });
-        final ImageButton takePhoto = findViewById(R.id.takePhoto);
+        final Button takePhoto = findViewById(R.id.take_photo);
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -103,23 +116,8 @@ public final class MainActivity extends AppCompatActivity {
                 startTakePhoto();
             }
         });
-        final ImageButton downloadFile = findViewById(R.id.downloadFile);
-        downloadFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Log.d(TAG, "Download file button click");
-                startDownloadFile();
-            }
-        });
-        final ImageButton rotateLeft = findViewById(R.id.rotateLeft);
-        rotateLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                Log.d(TAG, "Rotate left button clicked");
-                rotateLeft();
-            }
-        });
-        final ImageButton processImage = findViewById(R.id.processImage);
+
+        final Button processImage = findViewById(R.id.begin_hack);
         processImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -129,7 +127,6 @@ public final class MainActivity extends AppCompatActivity {
         });
 
         // There are a few button that we disable into an image has been loaded
-        enableOrDisableButtons(false);
 
         // We also want to make sure that our progress bar isn't spinning, and style it a bit
         ProgressBar progressBar = findViewById(R.id.progressBar);
@@ -316,6 +313,31 @@ public final class MainActivity extends AppCompatActivity {
         new Tasks.ProcessImageTask(MainActivity.this, requestQueue)
                 .execute(currentBitmap);
     }
+    public void finalCompareImages(final String jsonExample, final String json2Example) {
+        /**
+         * the jsons are already the same at this point. We need to figure out why, but I think
+         * it's because you have shallow references above.
+         */
+        Log.w(TAG, "Have the images been compared?");
+        if (jsonExample.equals(json2Example)) {
+            Toast.makeText(getApplicationContext(), "Same",
+                    Toast.LENGTH_LONG).show();
+            Log.w(TAG, "The images are the same");
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Different",
+                    Toast.LENGTH_LONG).show();
+            Log.w(TAG, "The images are different");
+            Vibrator();
+        }
+    }
+    public void Vibrator() {
+        Vibrator x = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        //Toast.makeText(getApplicationContext(), "V",
+        //        Toast.LENGTH_LONG).show();
+        x.vibrate(500); // for 500 ms
+    }
+
 
     /**
      * Process the result from making the API call.
@@ -323,48 +345,55 @@ public final class MainActivity extends AppCompatActivity {
      * @param jsonResult the result of the API call as a string
      * */
     protected void finishProcessImage(final String jsonResult) {
-        /*
-         * Pretty-print the JSON into the bottom text-view to help with debugging.
-         */
-        TextView textView = findViewById(R.id.jsonResult);
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        JsonParser jsonParser = new JsonParser();
-        JsonElement jsonElement = jsonParser.parse(jsonResult);
-        String prettyJsonString = gson.toJson(jsonElement);
-        textView.setText(prettyJsonString);
-
-        /*
-         * Create a string describing the image type, width and height.
-         */
-        int width = RecognizePhoto.getWidth(jsonResult);
-        int height = RecognizePhoto.getHeight(jsonResult);
-        String format = RecognizePhoto.getFormat(jsonResult);
-        format = format.toUpperCase();
-        String description = String.format(Locale.US, "%s (%d x %d)", format, width, height);
-
-        /*
-         * Update the UI to display the string.
-         */
-        TextView photoInfo = findViewById(R.id.photoInfo);
-        photoInfo.setText(description);
-
-        /*
-         * Add code here to show the caption, show or hide the dog and cat icons,
-         * and deal with Rick.
-         */
-
+        Log.w(TAG, jsonexample);
+        if (!(jsonStringArray[0].equals("")) && !(jsonStringArray[1].equals(""))) {
+            String temp = jsonStringArray[0];
+            jsonStringArray[1] = temp;
+            jsonStringArray[0] = jsonResult;
+            finalCompareImages(jsonStringArray[0], jsonStringArray[1]);
+            Log.w(TAG, "3");
+        }
+        if (jsonStringArray[1].equals("") && !(jsonStringArray[0].equals(""))) {
+            String temp = jsonStringArray[0];
+            jsonStringArray[1] = temp;
+            jsonStringArray[0] = jsonResult;
+            finalCompareImages(jsonStringArray[0], jsonStringArray[1]);
+            Log.w(TAG, "2");
+        }
+        if (jsonStringArray[0].equals("") && jsonStringArray[1].equals("")) {
+            jsonStringArray[0] = jsonResult;
+            Toast.makeText(getApplicationContext(), "first image",
+                    Toast.LENGTH_LONG).show();
+            Log.w(TAG, "empty");
+            Log.w(TAG, "1");
+        }
     }
-
-
-
-
-
-
-
-
-
-
-
+    public void returnAPI(final String json) {
+        jsonexample = "";
+        try {
+            JsonParser parser = new JsonParser();
+            JsonObject object = parser.parse(json).getAsJsonObject();
+            JsonArray tag = object.getAsJsonArray("regions");
+            for (JsonElement name : tag) {
+                JsonObject yes = name.getAsJsonObject();
+                JsonArray secondArray = yes.getAsJsonArray("lines");
+                for (JsonElement arrghh : secondArray) {
+                    JsonObject ha = arrghh.getAsJsonObject();
+                    JsonArray thirdArray = ha.getAsJsonArray("words");
+                    for (JsonElement lastOne: thirdArray) {
+                        JsonObject no = lastOne.getAsJsonObject();
+                        String rick = no.get("text").getAsString();
+                        jsonexample = jsonexample + rick;
+                    }
+                }
+            }
+        } catch (NullPointerException f) {
+        }
+        if (jsonexample.equals("")) {
+            jsonexample = jsonexample + "^";
+        }
+        finishProcessImage(jsonexample);
+    }
 
 
     /** Current bitmap we are working with. */
@@ -378,10 +407,6 @@ public final class MainActivity extends AppCompatActivity {
      * @param currentPhotoURI URI of the image to process
      */
     private void loadPhoto(final Uri currentPhotoURI) {
-        enableOrDisableButtons(false);
-        final ImageButton rotateLeft = findViewById(R.id.rotateLeft);
-        rotateLeft.setClickable(false);
-        rotateLeft.setEnabled(false);
 
         if (currentPhotoURI == null) {
             Toast.makeText(getApplicationContext(), "No image selected",
@@ -418,7 +443,7 @@ public final class MainActivity extends AppCompatActivity {
         /*
          * Resize the image appropriately for the display.
          */
-        final ImageView photoView = findViewById(R.id.photoView);
+        final ImageView photoView = findViewById(R.id.imageView2);
         int targetWidth = photoView.getWidth();
         int targetHeight = photoView.getHeight();
 
@@ -452,20 +477,10 @@ public final class MainActivity extends AppCompatActivity {
      */
     void updateCurrentBitmap(final Bitmap setCurrentBitmap, final boolean resetInfo) {
         currentBitmap = setCurrentBitmap;
-        ImageView photoView = findViewById(R.id.photoView);
+        ImageView photoView = findViewById(R.id.imageView2);
         photoView.setImageBitmap(currentBitmap);
-        enableOrDisableButtons(true);
 
-        if (resetInfo) {
-            TextView textView = findViewById(R.id.jsonResult);
-            textView.setText("");
-            TextView photoCaption = findViewById(R.id.photoCaption);
-            photoCaption.setVisibility(View.INVISIBLE);
-            ImageView isADog = findViewById(R.id.isADog);
-            isADog.setVisibility(View.INVISIBLE);
-            ImageView isACat = findViewById(R.id.isACat);
-            isACat.setVisibility(View.INVISIBLE);
-        }
+
     }
 
     /**
@@ -475,14 +490,7 @@ public final class MainActivity extends AppCompatActivity {
      *
      * @param enableOrDisable whether to enable or disable the buttons
      */
-    private void enableOrDisableButtons(final boolean enableOrDisable) {
-        final ImageButton rotateLeft = findViewById(R.id.rotateLeft);
-        rotateLeft.setClickable(enableOrDisable);
-        rotateLeft.setEnabled(enableOrDisable);
-        final ImageButton processImage = findViewById(R.id.processImage);
-        processImage.setClickable(enableOrDisable);
-        processImage.setEnabled(enableOrDisable);
-    }
+
 
     /**
      * Add a photo to the gallery so that we can use it later.
