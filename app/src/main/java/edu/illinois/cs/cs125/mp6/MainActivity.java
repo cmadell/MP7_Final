@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
+import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -123,6 +124,14 @@ public final class MainActivity extends AppCompatActivity {
             public void onClick(final View v) {
                 Log.d(TAG, "Process image button clicked");
                 startProcessImage();
+            }
+        });
+        final Button flipHorizontal = findViewById(R.id.flip_horizontal);
+        flipHorizontal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Log.d(TAG, "Process image button clicked");
+                flipPhotoHorizontally();
             }
         });
 
@@ -281,7 +290,7 @@ public final class MainActivity extends AppCompatActivity {
      *
      * Mainly to deal with idiocy caused by the emulated camera.
      */
-    private void rotateLeft() {
+    private void flipPhotoHorizontally() {
         if (currentBitmap == null) {
             Toast.makeText(getApplicationContext(), "No image selected",
                     Toast.LENGTH_LONG).show();
@@ -292,7 +301,7 @@ public final class MainActivity extends AppCompatActivity {
         Log.d(TAG, "Starting rotation");
 
         Matrix matrix = new Matrix();
-        matrix.postRotate(ROTATE_LEFT);
+        matrix.postScale(-1, 1, currentBitmap.getWidth()/2, currentBitmap.getHeight()/2);
         updateCurrentBitmap(Bitmap.createBitmap(currentBitmap,
                 0, 0, currentBitmap.getWidth(), currentBitmap.getHeight(), matrix, true), false);
     }
@@ -310,6 +319,7 @@ public final class MainActivity extends AppCompatActivity {
          * Launch our background task which actually makes the request. It will call
          * finishProcessImage below with the JSON string when it finishes.
          */
+
         new Tasks.ProcessImageTask(MainActivity.this, requestQueue)
                 .execute(currentBitmap);
     }
@@ -368,6 +378,7 @@ public final class MainActivity extends AppCompatActivity {
             Log.w(TAG, "1");
         }
     }
+    //test
     public void returnAPI(final String json) {
         jsonexample = "";
         try {
